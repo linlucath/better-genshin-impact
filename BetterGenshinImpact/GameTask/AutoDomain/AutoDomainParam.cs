@@ -92,6 +92,8 @@ public class AutoDomainParam : BaseTaskParam<AutoDomainTask>
         OriginalResin20UseCount = config.OriginalResin20UseCount;
         OriginalResin40UseCount = config.OriginalResin40UseCount;
         RewardRecognitionEnabled = config.RewardRecognitionEnabled;
+        FightTimeout = config.FightTimeout;
+        FindTreeTimeout = config.FindTreeTimeout;
     }
 
     public AutoDomainParam(int domainRoundNum = 0) : base(null, null)
