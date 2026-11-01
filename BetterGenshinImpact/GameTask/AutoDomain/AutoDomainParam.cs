@@ -57,6 +57,12 @@ public class AutoDomainParam : BaseTaskParam<AutoDomainTask>
     /// </summary>
     public bool RewardRecognitionEnabled { get; set; } = false;
 
+    /// <summary>自动秘境战斗超时时间（秒）。</summary>
+    public int FightTimeout { get; set; } = 300;
+
+    /// <summary>寻找石化古树超时时间（秒）。</summary>
+    public int FindTreeTimeout { get; set; } = 60;
+
     public AutoDomainParam(int domainRoundNum, string path) : base(null, null)
     {
         DomainRoundNum = domainRoundNum;
