@@ -328,13 +328,13 @@ public partial class AutoDomainTask : ISoloTask<Dictionary<string, int>>
                 await StartFight(combatScenes, combatCommands);
                 combatScenes.AfterTask();
             }
-            await CheckCombatTimeout();
+            CheckCombatTimeout();
             EndFightWait();
 
             // 3. 寻找石化古树 并左右移动直到石化古树位于屏幕中心
             Logger.LogInformation("自动秘境：{Text}", "3. 寻找石化古树");
             await FindPetrifiedTree();
-            await CheckFindTreeTimeout();
+            CheckFindTreeTimeout();
 
             // 4. 走到石化古树处
             Logger.LogInformation("自动秘境：{Text}", "4. 走到石化古树处");
@@ -962,8 +962,8 @@ public partial class AutoDomainTask : ISoloTask<Dictionary<string, int>>
         await Task.WhenAll(combatTask, domainEndTask);
     }
 
-    /// <summary>战斗超时后尝试退出秘境，再传送到七天神像并触发秘境重试。</summary>
-    private async Task CheckCombatTimeout()
+    /// <summary>战斗超时后传送到七天神像并触发秘境重试。</summary>
+    private void CheckCombatTimeout()
     {
         if (!_isCombatTimeout)
         {
@@ -972,22 +972,13 @@ public partial class AutoDomainTask : ISoloTask<Dictionary<string, int>>
 
         _isCombatTimeout = false;
         var fightTimeout = _taskParam.FightTimeout > 0 ? _taskParam.FightTimeout : 300;
-        Logger.LogWarning("自动秘境：战斗超过 {Timeout} 秒，尝试退出秘境并进行恢复重试", fightTimeout);
-        try
-        {
-            await ExitDomain();
-            await Delay(1000, _ct);
-        }
-        catch
-        {
-        }
-
+        Logger.LogWarning("自动秘境：战斗超过 {Timeout} 秒，直接传送到七天神像并进行恢复重试", fightTimeout);
         Avatar.TpForRecover(_ct,
             new RetryException($"战斗超过 {fightTimeout} 秒，先传送到七天神像，然后重试秘境"));
     }
 
-    /// <summary>寻找石化古树超时后尝试退出秘境，再传送到七天神像并触发秘境重试。</summary>
-    private async Task CheckFindTreeTimeout()
+    /// <summary>寻找石化古树超时后传送到七天神像并触发秘境重试。</summary>
+    private void CheckFindTreeTimeout()
     {
         if (!_isFindTreeTimeout)
         {
@@ -996,16 +987,7 @@ public partial class AutoDomainTask : ISoloTask<Dictionary<string, int>>
 
         _isFindTreeTimeout = false;
         var findTreeTimeout = _taskParam.FindTreeTimeout > 0 ? _taskParam.FindTreeTimeout : 60;
-        Logger.LogWarning("自动秘境：寻找石化古树超过 {Timeout} 秒，尝试退出秘境并进行恢复重试", findTreeTimeout);
-        try
-        {
-            await ExitDomain();
-            await Delay(1000, _ct);
-        }
-        catch
-        {
-        }
-
+        Logger.LogWarning("自动秘境：寻找石化古树超过 {Timeout} 秒，直接传送到七天神像并进行恢复重试", findTreeTimeout);
         Avatar.TpForRecover(_ct,
             new RetryException($"寻找石化古树超过 {findTreeTimeout} 秒，先传送到七天神像，然后重试秘境"));
     }
