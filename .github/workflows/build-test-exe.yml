@@ -1,0 +1,26 @@
+name: Build Test EXE
+
+on:
+  push:
+    branches:
+      - test-domain-timeout
+  pull_request:
+    branches:
+      - test-domain-timeout
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.x
+      - name: Publish BetterGI
+        run: dotnet publish BetterGenshinImpact/BetterGenshinImpact.csproj -c Release -p:PublishProfile=FolderProfile
+      - uses: actions/upload-artifact@v4
+        with:
+          name: BetterGI-win-x64
+          path: BetterGenshinImpact/bin/x64/Release/net10.0-windows10.0.22621.0/publish/win-x64/
+          if-no-files-found: error

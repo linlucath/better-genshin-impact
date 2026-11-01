@@ -157,6 +157,12 @@ public class AutoDomainParam : BaseTaskParam<AutoDomainTask>
     /// </summary>
     public bool RewardRecognitionEnabled { get; set; } = false;
 
+    /// <summary>自动秘境战斗超时时间（秒），默认 300 秒。</summary>
+    public int FightTimeout { get; set; } = 300;
+
+    /// <summary>自动秘境寻找石化古树超时时间（秒），默认 60 秒。</summary>
+    public int FindTreeTimeout { get; set; } = 60;
+
     /// <summary>
     /// 战斗结束后延迟几秒再开始寻找石化古树，单位秒。对应 <see cref="AutoDomainConfig.FightEndDelay"/>。
     /// </summary>
